@@ -3,7 +3,7 @@
 This is the famous "popular movie" app useful to browse IMDB movies.
 It's made with flutter and it is cross platform IOS/Android.
 
-**Some flutter and dart libraries used in the project:
+**Some flutter and dart libraries used in the project:**
 
 Chopper (retrofit library)
 Bloc (state management)
