@@ -1,16 +1,22 @@
-# popular_movies
+# Popular Movies Flutter
 
-A new Flutter project.
+This is the famous "popular movie" app useful to browse IMDB movies.
+It's made with flutter and is cross platform IOS/Android/Web.
 
-## Getting Started
+## Some flutter and dart libraries used in project:
 
-This project is a starting point for a Flutter application.
+**Chopper** (retrofit library)  
+**Bloc** (state management)  
+**Get_it** (dependency injection)  
+**Hive** (for storage)  
+**Go Router** (for navigation)  
+**Url Luncher**  (to open url in the browser)  
+**Cached_network_image** (to make image loading faster)  
 
-A few resources to get you started if this is your first Flutter project:
+## Instructions ##  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+to start the app create a file named api_keys.json and fill its content like that: 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+{
+  "IMDB_KEY": "my_api_key"  //remove "my_api_key" and put in its place your api key sourranded by quotation marks
+}
