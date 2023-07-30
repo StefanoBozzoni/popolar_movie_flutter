@@ -1,16 +1,13 @@
 # popular_movies
 
-A new Flutter project.
+This is the famous "popular movie" app useful to browse IMDB movies.
+It's made with flutter and it is cross platform IOS/Android.
 
-## Getting Started
+**Some flutter and dart libraries used in the project:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Chopper (retrofit library)
+Bloc (state management)
+get_it (dependency injection)
+Hive (for storage)
+url_luncher  (to open url in the browser)
+cached_network_image (to make image loading faster)
