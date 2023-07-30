@@ -23,13 +23,28 @@ class ReviewsList extends StatelessWidget {
           return Column(children: [
             InkWell(
               onTap: () => {launchInBrowser(Uri.parse(movieInfo.review?[index].url ?? ""))},
-              child: Text(
-                thisReview?.content ?? "",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceVariant),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                        child: Text(
+                          style: const TextStyle(),
+                          thisReview?.content ?? "",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right)
+                  ],
+                ),
               ),
             ),
-            const Divider()
+            const SizedBox(height: 5,)
           ]);
         });
   }

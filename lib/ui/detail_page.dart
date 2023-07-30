@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:popular_movies/di/injection.dart';
 import 'package:popular_movies/ui/reviews_list.dart';
 import 'package:popular_movies/ui/trailer_list.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/model/movie.dart';
 import '../domain/utils/constants.dart';
 import '../presentation/bloc/bloc_movie_service_bloc.dart';
-import 'package:intl/intl.dart';
 
 class DetailPage extends StatelessWidget {
   final int id;
@@ -53,6 +53,7 @@ class DetailPageContent extends StatelessWidget {
             final myMovie = movieInfo.movie;
 
             final url = posterBaseUrl + w500 + (myMovie.backdropPath ?? "");
+            final titleBackground = Theme.of(context).colorScheme.secondaryContainer;
 
             return ListView(
                 shrinkWrap: false,
@@ -68,7 +69,7 @@ class DetailPageContent extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       children: [
                         Container(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            margin: const EdgeInsets.only(top: 8 , bottom: 12),
                             child: HeaderMovieInfo(
                                 movie: myMovie,
                                 favIsChecked: state.favIsChecked,
@@ -77,21 +78,33 @@ class DetailPageContent extends StatelessWidget {
                                 })),
                         Text(myMovie.overview ?? ""),
                         if (movieInfo.videos?.isNotEmpty ?? false)
-                          const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              child: Text(
-                                "Trailers",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 24, bottom: 5),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.only(top: 4, bottom: 4),
+                                decoration: BoxDecoration(
+                                    color: titleBackground, borderRadius: const BorderRadius.all(Radius.circular(8))),
+                                child: const Text(
+                                  "Trailers",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,),
+                                ),
                               )),
                         TrailersList(movieInfo: movieInfo),
                         if (movieInfo.review?.isNotEmpty ?? false)
-                          const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              child: Text(
-                                "Reviews",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 16, bottom: 5),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.only(top: 4, bottom: 4),
+                                decoration: BoxDecoration(
+                                    color: titleBackground, borderRadius: const BorderRadius.all(Radius.circular(8))),
+                                child: const Text(
+                                  "Reviews",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
                               )),
                         ReviewsList(movieInfo: movieInfo),
                       ],
@@ -186,7 +199,6 @@ class FavIconWidget extends StatefulWidget {
 }
 
 class _FavIconWidgetState extends State<FavIconWidget> {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MovieServiceBloc, BlocMovieServiceState>(
