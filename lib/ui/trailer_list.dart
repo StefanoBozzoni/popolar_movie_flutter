@@ -12,7 +12,7 @@ class TrailersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 100,
+        height: 200,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: (movieInfo.videos?.length ?? 0),
@@ -24,18 +24,42 @@ class TrailersList extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 2),
                 child: InkWell(
                   onTap: () => {launchInBrowser(Uri.parse(urlVideo))},
-                  child: IntrinsicWidth(
-                    child: Stack(children: [
-                      Image.network(
-                        urlthumbnail,
-                        height: 100,
-                      ),
-                      Center(
-                          child: Transform.scale(
-                              scale: 1.3, child: const Icon(MyFlutterApp.icPlay, color: Colors.white60))),
-                      //CustomSingleChildLayout(delegate: )
-                    ]),
-                  ),
+                        child: Card(
+                          clipBehavior: Clip.hardEdge,
+                          elevation: 4,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children:[
+                                    SizedBox(
+                                        height: 150, width: 200,
+                                        child: Stack(
+                                          children: [
+                                              Image.network(
+                                                urlthumbnail,
+                                              ),
+                                              Center(
+                                                  child: Transform.scale(
+                                                      scale: 2, 
+                                                      child: const Icon(MyFlutterApp.icPlay, color: Colors.white54))),
+                                          ]
+                                        ),
+                                    ),
+                                    Expanded(
+                                      child: SizedBox(
+                                        width: 200,
+                                        child: Padding( padding: const EdgeInsets.symmetric(horizontal: 4),
+                                          child: Text(
+                                            movieInfo.videos?[index].name??"",
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,),
+                                        )
+                                        )
+                                    ),
+                              ],
+                              ),
+                        ),
                 ),
               );
             }));

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:popular_movies/di/injection.dart';
+import 'package:popular_movies/ui/padding_list.dart';
+import 'package:popular_movies/ui/rating_bar.dart';
 import 'package:popular_movies/ui/reviews_list.dart';
 import 'package:popular_movies/ui/trailer_list.dart';
 
@@ -54,61 +56,61 @@ class DetailPageContent extends StatelessWidget {
 
             final url = posterBaseUrl + w500 + (myMovie.backdropPath ?? "");
             final titleBackground = Theme.of(context).colorScheme.secondaryContainer;
-
-            return ListView(
-                shrinkWrap: false,
-                children: addPaddingToWidgets(padding: EdgeInsets.zero, children: [
-                      CachedNetworkImage(
-                        imageUrl: url,
-                        fit: BoxFit.fitWidth,
-                        height: 232,
-                        width: double.infinity,
-                      )
-                    ]) +
-                    addPaddingToWidgets(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      children: [
-                        Container(
-                            margin: const EdgeInsets.only(top: 8 , bottom: 12),
-                            child: HeaderMovieInfo(
-                                movie: myMovie,
-                                favIsChecked: state.favIsChecked,
-                                onFavClicked: (isChecked) {
-                                  BlocProvider.of<MovieServiceBloc>(context).add(AddFavoriteMovieEvent(isChecked));
-                                })),
-                        Text(myMovie.overview ?? ""),
-                        if (movieInfo.videos?.isNotEmpty ?? false)
-                          Padding(
-                              padding: const EdgeInsets.only(top: 24, bottom: 5),
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.only(top: 4, bottom: 4),
-                                decoration: BoxDecoration(
-                                    color: titleBackground, borderRadius: const BorderRadius.all(Radius.circular(8))),
-                                child: const Text(
-                                  "Trailers",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,),
-                                ),
-                              )),
-                        TrailersList(movieInfo: movieInfo),
-                        if (movieInfo.review?.isNotEmpty ?? false)
-                          Padding(
-                              padding: const EdgeInsets.only(top: 16, bottom: 5),
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.only(top: 4, bottom: 4),
-                                decoration: BoxDecoration(
-                                    color: titleBackground, borderRadius: const BorderRadius.all(Radius.circular(8))),
-                                child: const Text(
-                                  "Reviews",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                ),
-                              )),
-                        ReviewsList(movieInfo: movieInfo),
-                      ],
-                    ));
+            return Column(children: [
+              PaddingList(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: url,
+                    fit: BoxFit.fitWidth,
+                    height: 232,
+                    width: double.infinity,
+                  ),
+                  Container(
+                      margin: const EdgeInsets.only(top: 8, bottom: 12),
+                      child: HeaderMovieInfo(
+                          movie: myMovie,
+                          favIsChecked: state.favIsChecked,
+                          onFavClicked: (isChecked) {
+                            BlocProvider.of<MovieServiceBloc>(context).add(AddFavoriteMovieEvent(isChecked));
+                          })),
+                  Text(myMovie.overview ?? ""),
+                  if (movieInfo.videos?.isNotEmpty ?? false)
+                    Padding(
+                        padding: const EdgeInsets.only(top: 24, bottom: 5),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(top: 4, bottom: 4),
+                          decoration: BoxDecoration(
+                              color: titleBackground, borderRadius: const BorderRadius.all(Radius.circular(8))),
+                          child: const Text(
+                            "Trailers",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        )),
+                  TrailersList(movieInfo: movieInfo),
+                  if (movieInfo.review?.isNotEmpty ?? false)
+                    Padding(
+                        padding: const EdgeInsets.only(top: 16, bottom: 5),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(top: 4, bottom: 4),
+                          decoration: BoxDecoration(
+                              color: titleBackground, borderRadius: const BorderRadius.all(Radius.circular(8))),
+                          child: const Text(
+                            "Reviews",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        )),
+                  ReviewsList(movieInfo: movieInfo),
+                ],
+              )
+            ]);
           }
         case BlocMovieServiceLoading:
           {
@@ -221,60 +223,4 @@ class _FavIconWidgetState extends State<FavIconWidget> {
       },
     );
   }
-}
-
-List<Widget> ratingBar(double rate) {
-  int num = rate.floor();
-  double diff = rate - num;
-  var numList = List.generate(num, (index) => index)
-      .map((e) => const Icon(
-            Icons.star,
-            color: Colors.red,
-            size: 16,
-          ))
-      .toList();
-
-  if (diff >= 0.5) {
-    numList.add(const Icon(Icons.star_half, color: Colors.red, size: 16));
-  }
-
-  //final List<Icon> emptystarList = List.empty();
-  var emptystarList = List.generate(10 - numList.length, (index) => index)
-      .map((e) => const Icon(
-            Icons.star_outline,
-            color: Colors.red,
-            size: 16,
-          ))
-      .toList();
-
-  return numList + emptystarList;
-}
-
-class PaddingList extends StatelessWidget {
-  final List<Widget> children;
-  final EdgeInsets padding;
-
-  const PaddingList(this.children, this.padding, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: children.map((child) {
-        return Padding(
-          padding: padding,
-          child: child,
-        );
-      }).toList(),
-    );
-  }
-}
-
-List<Widget> addPaddingToWidgets(
-    {EdgeInsets padding = const EdgeInsets.symmetric(vertical: 8), List<Widget> children = const []}) {
-  return children.map((child) {
-    return Padding(
-      padding: padding,
-      child: child,
-    );
-  }).toList();
 }
