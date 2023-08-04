@@ -10,7 +10,16 @@ class BlocMovieServiceLoading extends BlocMovieServiceState {}
 class BlocMovieServiceSuccess extends BlocMovieServiceState {
   final List<Movie> moviesList;
   final String listType;
-  BlocMovieServiceSuccess(this.moviesList, this.listType);
+  final EventType eventType;
+  BlocMovieServiceSuccess(this.moviesList, this.listType, this.eventType);
+}
+
+class BlocMovieServiceNextPage extends BlocMovieServiceState {
+  final List<Movie> moviesList;
+  final String listType;
+  final int nextPage;
+  final bool isLastPage;
+  BlocMovieServiceNextPage(this.moviesList, this.listType, this.nextPage, this.isLastPage);
 }
 
 class BlocMovieServiceDetailSuccess extends BlocMovieServiceState {

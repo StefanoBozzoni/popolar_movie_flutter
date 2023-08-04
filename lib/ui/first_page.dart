@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:popular_movies/my_flutter_app_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:popular_movies/ui/paged_grid.dart';
 import '../data/model/movie.dart';
 import '../di/injection.dart';
 import '../domain/utils/constants.dart';
@@ -27,12 +28,16 @@ class FirtsPage extends StatelessWidget {
                     actions: [
                       AppbarMenuSwitches(
                         onPressed: (index) {
-                          switch(index) {
-                            case 0 : BlocProvider.of<MovieServiceBloc>(context).add(RequestMoviesEvent("Grid", EventType.popular));
-                            case 1 : BlocProvider.of<MovieServiceBloc>(context).add(RequestMoviesEvent("Grid", EventType.toprated));
-                            case 2 : BlocProvider.of<MovieServiceBloc>(context).add(RequestFavoriteMoviesEvent());
+                          switch (index) {
+                            case 0:
+                              BlocProvider.of<MovieServiceBloc>(context)
+                                  .add(RequestMoviesEvent("PagedGrid", EventType.popular));
+                            case 1:
+                              BlocProvider.of<MovieServiceBloc>(context)
+                                  .add(RequestMoviesEvent("PagedGrid", EventType.toprated));
+                            case 2:
+                              BlocProvider.of<MovieServiceBloc>(context).add(RequestFavoriteMoviesEvent());
                           }
-                          
                         },
                       )
                     ]),
@@ -151,6 +156,11 @@ class MyBlocExamplePage extends StatelessWidget {
                     BlocProvider.of<MovieServiceBloc>(context).add(RequestMoviesEvent("Grid", EventType.popular));
                   },
                   child: const Text("Movies Grid")),
+              TextButton(
+                  onPressed: () {
+                    BlocProvider.of<MovieServiceBloc>(context).add(RequestMoviesEvent("PagedGrid", EventType.popular));
+                  },
+                  child: const Text("Movies paged Grid")),
             ],
           );
         }
@@ -169,11 +179,12 @@ class MyBlocExamplePage extends StatelessWidget {
       case BlocMovieServiceSuccess:
         {
           var thisState = state as BlocMovieServiceSuccess;
-          if (thisState.listType == "List") {
-            return MyList(movies: thisState.moviesList);
-          } else {
-            return MyGrid(movies: thisState.moviesList);
-          }
+          return switch (thisState.listType) {
+            "List" => MyList(movies: thisState.moviesList),
+            "Grid" => MyGrid(movies: thisState.moviesList),
+            "PagedGrid" => PagedGrid(eventType: thisState.eventType,  movies: thisState.moviesList),
+            _ => const Placeholder()
+          };
         }
 
       case BlocMovieServiceError:

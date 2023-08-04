@@ -3,12 +3,17 @@ part of 'bloc_movie_service_bloc.dart';
 @immutable
 sealed class BlocMovieServiceEvent {}
 
-enum EventType { popular, toprated }
+enum EventType { popular, toprated , favorites}
 
 class RequestMoviesEvent extends BlocMovieServiceEvent {
   final String requestType;
   final EventType eventType;
   RequestMoviesEvent(this.requestType, this.eventType);
+}
+
+class RequestMoviesEventPage extends RequestMoviesEvent {
+  final int pageNum;
+  RequestMoviesEventPage(requestType, eventType, this.pageNum) : super(requestType, eventType);
 }
 
 class RequestMovieDetailEvent extends BlocMovieServiceEvent {

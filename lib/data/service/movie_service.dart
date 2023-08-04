@@ -6,10 +6,10 @@ part 'movie_service.chopper.dart';
 @ChopperApi(baseUrl: '/3')
 abstract class MovieService extends ChopperService {
   @Get(path: 'movie/popular')
-  Future<Response> getPopularMovies();
+  Future<Response> getPopularMovies(@Query("page") int page);
 
   @Get(path: 'movie/top_rated')
-  Future<Response> getTopRatedMovies();
+  Future<Response> getTopRatedMovies(@Query("page") int page);
 
   @Get(path: 'movie/{id}/reviews')
   Future<Response> getReviews(@Path("id") int id);

@@ -22,9 +22,15 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
   final GetFavoriteStatusUseCase getFavoritesStatusUseCase;
   final SetFavoriteStatusUseCase setFavoritesStatusUseCase;
 
-  MovieServiceBloc(this.getMoviesListUseCase, this.getMovieInfoUseCase,
-      this.getFavoritesMovieInfoUseCase, this.getFavoritesStatusUseCase, this.setFavoritesStatusUseCase)
-      : super(BlocMovieServiceInitial()) {
+  Future<List<Movie>> getNewPageElements(EventType eventType, int pageNum) async {
+      //execute business logic
+      final moviesCatalog = await getMoviesListUseCase.getMoviesList2(eventType, pageNum);
+      return moviesCatalog.success?.results??[];
+  } 
+
+  MovieServiceBloc(this.getMoviesListUseCase, this.getMovieInfoUseCase, this.getFavoritesMovieInfoUseCase,
+      this.getFavoritesStatusUseCase, this.setFavoritesStatusUseCase): super(BlocMovieServiceInitial()) {
+  
     on<RequestMoviesEvent>((event, emit) async {
       emit(BlocMovieServiceLoading());
       //execute business logic
@@ -35,7 +41,21 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
         emit(BlocMovieServiceError());
       }, successCond: (data) {
         debugPrint('got movies!');
-        emit(BlocMovieServiceSuccess(data, event.requestType));
+        emit(BlocMovieServiceSuccess(data.results??[], event.requestType, event.eventType));
+      });
+    });
+
+    on<RequestMoviesEventPage>((event, emit) async {
+      emit(BlocMovieServiceLoading());
+      //execute business logic
+      final moviesCatalog = await getMoviesListUseCase.getMoviesList2(event.eventType, event.pageNum);
+
+      moviesCatalog.fold(failureCond: (failure) {
+        debugPrint('got error!');
+        emit(BlocMovieServiceError());
+      }, successCond: (data) {
+        debugPrint('got movies!');
+        emit(BlocMovieServiceNextPage(data.results??[], event.requestType, event.pageNum, data.totalPages==event.pageNum));
       });
     });
 
@@ -69,7 +89,7 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
         final result = await setFavoritesStatusUseCase.execute(event.isChecked, movie);
         if (result) {
           emit(BlocMovieServiceDetailSuccess(movieInfo!, !event.isChecked));
-        } else  {
+        } else {
           emit(BlocMovieServiceDetailSuccess(movieInfo!, event.isChecked));
         }
       }
@@ -85,8 +105,8 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
         debugPrint('got error!');
         emit(BlocMovieServiceError());
       }, successCond: (data) {
-        debugPrint('got movies!');
-        emit(BlocMovieServiceSuccess(data, "Grid"));
+        debugPrint('got favorite movies!');
+        emit(BlocMovieServiceSuccess(data, "Grid", EventType.favorites));
       });
     });
   }

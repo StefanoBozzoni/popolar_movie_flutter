@@ -16,7 +16,7 @@ import '../../di/injection.dart';
 import '../utils/result.dart';
 
 abstract interface class IMoviesRepository {
-  Future<MyEither<List<Movie>, Failure>> getMoviesList2(EventType requestType);
+  Future<MyEither<MoviesCatalog, Failure>> getMoviesList2(EventType requestType, int pageNum);
   Future<Result> getMoviesList(); //just an example of using result class
   Future<MyEither<List<Favorites>, Failure>> getFavoriteMoviesList();
   Future<MyEither<Review, Failure>> getReviews(int id);
@@ -35,23 +35,28 @@ class _MovieRepository implements IMoviesRepository {
   _MovieRepository(this.movieApiService);
 
   @override
-  Future<MyEither<List<Movie>, Failure>> getMoviesList2(EventType requestType) async {
+  Future<MyEither<MoviesCatalog, Failure>> getMoviesList2(EventType requestType, int pageNum) async {
     Response<dynamic> response;
 
     switch (requestType) {
       case EventType.popular:
         {
-          response = await movieApiService.getPopularMovies();
+          response = await movieApiService.getPopularMovies(pageNum);
         }
       case EventType.toprated:
         {
-          response = await movieApiService.getTopRatedMovies();
+          response = await movieApiService.getTopRatedMovies(pageNum);
+        }
+
+      case EventType.favorites:
+        {
+          throw Exception("wrong api called");
         }
     }
 
     if (response.isSuccessful) {
       final movies = MoviesCatalog.fromJson(response.body);
-      return MyEither(success: movies.results);
+      return MyEither(success: movies);
     } else {
       return MyEither(failure: DefaultFailure(errorMessage: ""));
     }
@@ -60,7 +65,7 @@ class _MovieRepository implements IMoviesRepository {
   //example using Result class as a wrapper for return value
   @override
   Future<Result> getMoviesList() async {
-    Response<dynamic> response = await movieApiService.getPopularMovies();
+    Response<dynamic> response = await movieApiService.getPopularMovies(1);
     if (response.isSuccessful) {
       final movies = MoviesCatalog.fromJson(response.body);
       return ResultSuccess(movies);

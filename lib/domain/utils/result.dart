@@ -22,12 +22,14 @@ class MyEither<R, T> {
   T? failure;
   MyEither({this.success, this.failure});
 
-  fold({Function? successCond, Function? failureCond}) {
-    if (success != null && successCond != null) {
-      successCond(success);
+  fold({Function(R)? successCond, Function(T)? failureCond}) {
+    final R? mysuccess = success;
+    if (mysuccess != null && successCond != null) {
+      successCond(mysuccess);
     }
-    if (failure != null && failureCond != null) {
-      failureCond(failure);
+    final T? myfailure = failure;
+    if (myfailure != null && failureCond != null) {
+        failureCond(myfailure);
     }
   }
 

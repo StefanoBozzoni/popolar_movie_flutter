@@ -91,7 +91,7 @@ class MyMovieList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Provider.of<MovieService>(context).getPopularMovies(), //<-- here invokes the provider
+      future: Provider.of<MovieService>(context).getPopularMovies(1), //<-- here invokes the provider
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           // Exceptions thrown by the Future are stored inside the "error" field of the AsyncSnapshot

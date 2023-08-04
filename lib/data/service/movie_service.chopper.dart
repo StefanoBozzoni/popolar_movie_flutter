@@ -17,23 +17,27 @@ class _$MovieService extends MovieService {
   final definitionType = MovieService;
 
   @override
-  Future<Response<dynamic>> getPopularMovies() {
+  Future<Response<dynamic>> getPopularMovies(int page) {
     final Uri $url = Uri.parse('/3/movie/popular');
+    final Map<String, dynamic> $params = <String, dynamic>{'page': page};
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
+      parameters: $params,
     );
     return client.send<dynamic, dynamic>($request);
   }
 
   @override
-  Future<Response<dynamic>> getTopRatedMovies() {
+  Future<Response<dynamic>> getTopRatedMovies(int page) {
     final Uri $url = Uri.parse('/3/movie/top_rated');
+    final Map<String, dynamic> $params = <String, dynamic>{'page': page};
     final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
+      parameters: $params,
     );
     return client.send<dynamic, dynamic>($request);
   }

@@ -6,6 +6,7 @@ import 'package:popular_movies/presentation/bloc/bloc_movie_service_bloc.dart';
 import 'package:popular_movies/domain/repositories/movie_repo.dart';
 import 'package:popular_movies/data/service/movie_service.dart';
 import 'package:get_it/get_it.dart';
+import 'package:popular_movies/presentation/paging_bloc.dart';
 
 import '../domain/interactors/get_movieslist_usecase.dart';
 
@@ -21,6 +22,7 @@ Future<void> init() async {
   getIt.registerFactory(() => SetFavoriteStatusUseCase(getIt()));
 
   getIt.registerFactory<MovieServiceBloc>(() => MovieServiceBloc(getIt(), getIt(), getIt(), getIt(), getIt())); //Bloc Model
+  getIt.registerFactory<PagingBloc>(() => PagingBloc(getIt())); //Bloc Model
 
   getIt.registerSingleton<IMoviesRepository>(IMoviesRepository.getInstance()); //Repository IMoviesRepository
 }

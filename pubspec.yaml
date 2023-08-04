@@ -49,6 +49,8 @@ dependencies:
   hive: ^2.2.3
   hive_generator: ^2.0.0
   hive_flutter: ^1.1.0
+  flutter_launcher_icons: ^0.13.1
+  infinite_scroll_pagination: ^3.2.0
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +70,12 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+    android: true
+    ios: true
+    remove_alpha_ios: true  #not allowed in the ios store
+    image_path: "images/icon/ic_movie_logo_round.png"
 
 # The following section is specific to Flutter packages.
 flutter:
