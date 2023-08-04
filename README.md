@@ -22,5 +22,6 @@ to start the app create a file named api_keys.json and fill its content like tha
   "IMDB_KEY": "my_api_key"  //remove "my_api_key" and put in its place your api key sourranded by quotation marks
 }
 
-https://github.com/StefanoBozzoni/popolar_movie_flutter/assets/31867655/3d9377be-64f8-4d21-82f2-3741c28771a1
+https://github.com/StefanoBozzoni/popolar_movie_flutter/assets/31867655/d11b96a6-4931-4ae3-a17e-ee41dd183ac2
+
 
