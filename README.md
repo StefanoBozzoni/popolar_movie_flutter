@@ -6,12 +6,12 @@ It's made with flutter and is cross platform IOS/Android/Web.
 ## Some flutter and dart libraries used in project:
 
 **Chopper** (retrofit library)  
-**Infinite_scroll_pagination** (infinite grid scrolling)  
+**Infinite_scroll_pagination** (infinite scrolling grid)  
 **Bloc** (state management)  
 **Get_it** (dependency injection)  
 **Hive** (for storage)  
 **Go Router** (for navigation)  
-**Url Luncher**  (to open url in the browser)  
+**Url Luncher**  (for browser urls opening)  
 **Cached_network_image** (to make image loading faster)  
 
 ## Instructions ##  
@@ -23,5 +23,7 @@ to start the app create a file named api_keys.json and fill its content like tha
 }
 
 https://github.com/StefanoBozzoni/popolar_movie_flutter/assets/31867655/d11b96a6-4931-4ae3-a17e-ee41dd183ac2
+
+https://github.com/StefanoBozzoni/popolar_movie_flutter/assets/31867655/b60bd299-a32d-4877-ad43-e86d43abca3d
 
 
