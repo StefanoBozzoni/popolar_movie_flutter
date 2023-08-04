@@ -6,6 +6,7 @@ It's made with flutter and is cross platform IOS/Android/Web.
 ## Some flutter and dart libraries used in project:
 
 **Chopper** (retrofit library)  
+**Infinite_scroll_pagination** (infinite grid scrolling)  
 **Bloc** (state management)  
 **Get_it** (dependency injection)  
 **Hive** (for storage)  
