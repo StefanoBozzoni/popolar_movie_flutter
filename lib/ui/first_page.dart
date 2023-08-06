@@ -46,7 +46,7 @@ class FirtsPage extends StatelessWidget {
                   decoration: const BoxDecoration(
                     image: DecorationImage(image: NetworkImage(mainpagebackGroundUrl), fit: BoxFit.fill),
                   ),
-                  child: MyBlocExamplePage(state: state),
+                  child: BodyFirstPage(state: state),
                 ));
           },
         ),
@@ -120,9 +120,9 @@ class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
   }
 }
 
-class MyBlocExamplePage extends StatelessWidget {
+class BodyFirstPage extends StatelessWidget {
   final BlocMovieServiceState state;
-  const MyBlocExamplePage({super.key, required this.state});
+  const BodyFirstPage({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +200,7 @@ class MyBlocExamplePage extends StatelessWidget {
   }
 }
 
+//movies grid, not paginated
 class MyGrid extends StatelessWidget {
   final List<Movie> movies;
   final String baseImagePath = "https://image.tmdb.org/t/p/w185/";
@@ -217,38 +218,34 @@ class MyGrid extends StatelessWidget {
             onTap: () {
               context.pushNamed("detail", pathParameters: {'id': movies[index].id.toString()});
             },
-            child: Hero(
-              tag: posterImage,
-              flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) =>
-                  const Text('💖'),
-              child: CachedNetworkImage(
-                  imageUrl: baseImagePath + (movies[index].posterPath ?? ""),
-                  placeholder: (context, url) => Container(
-                        height: 90,
-                        width: 90,
-                        color: Colors.transparent,
-                        child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
-                      )
-                  /*
-              child: Image.network(baseImagePath + (movies[index].posterPath ?? ""),
-                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                if (frame == null) {
-                  return Container(
-                    height: 90,
-                    width: 90,
-                    color: Colors.transparent,
-                    child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
-                  );
-                } else {
-                  return child;
-                }
-                }
-                */
-                  ),
-            )));
+            child: CachedNetworkImage(
+                imageUrl: baseImagePath + (movies[index].posterPath ?? ""),
+                placeholder: (context, url) => Container(
+                      height: 90,
+                      width: 90,
+                      color: Colors.transparent,
+                      child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
+                    )
+                /*
+            child: Image.network(baseImagePath + (movies[index].posterPath ?? ""),
+                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              if (frame == null) {
+                return Container(
+                  height: 90,
+                  width: 90,
+                  color: Colors.transparent,
+                  child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
+                );
+              } else {
+                return child;
+              }
+              }
+              */
+                )));
   }
 }
 
+//Movies, not paginated
 class MyList extends StatelessWidget {
   final List<Movie> movies;
   final String baseImagePath = "https://image.tmdb.org/t/p/w185/";

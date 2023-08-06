@@ -151,14 +151,11 @@ class HeaderMovieInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Hero(
-          tag: posterImage,
-          child: CachedNetworkImage(
-            fadeInDuration: Duration.zero,
-            imageUrl: url2,
-            height: 124,
-            width: 86,
-          ),
+        CachedNetworkImage(
+          fadeInDuration: Duration.zero,
+          imageUrl: url2,
+          height: 124,
+          width: 86,
         ),
         const SizedBox(
           width: 8,
