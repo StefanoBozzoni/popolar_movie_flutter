@@ -37,10 +37,8 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
       final moviesCatalog = await getMoviesListUseCase.getMoviesList2(event.eventType);
 
       moviesCatalog.fold(failureCond: (failure) {
-        debugPrint('got error!');
         emit(BlocMovieServiceError());
       }, successCond: (data) {
-        debugPrint('got movies!');
         emit(BlocMovieServiceSuccess(data.results??[], event.requestType, event.eventType));
       });
     });
@@ -51,10 +49,8 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
       final moviesCatalog = await getMoviesListUseCase.getMoviesList2(event.eventType, event.pageNum);
 
       moviesCatalog.fold(failureCond: (failure) {
-        debugPrint('got error!');
         emit(BlocMovieServiceError());
       }, successCond: (data) {
-        debugPrint('got movies!');
         emit(BlocMovieServiceNextPage(data.results??[], event.requestType, event.pageNum, data.totalPages==event.pageNum));
       });
     });
@@ -72,10 +68,8 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
       }
 
       result.fold(failureCond: (failure) {
-        debugPrint('got error!');
         emit(BlocMovieServiceError());
       }, successCond: (data) {
-        debugPrint('got movie detail!');
         movieInfo = data;
         emit(BlocMovieServiceDetailSuccess(data, favorite.success != null));
       });
@@ -102,10 +96,8 @@ class MovieServiceBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
       final result = await getFavoritesMovieInfoUseCase.execute();
 
       result.fold(failureCond: (failure) {
-        debugPrint('got error!');
         emit(BlocMovieServiceError());
       }, successCond: (data) {
-        debugPrint('got favorite movies!');
         emit(BlocMovieServiceSuccess(data, "Grid", EventType.favorites));
       });
     });

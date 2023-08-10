@@ -8,24 +8,24 @@
             "name": "popular_movies",
             "request": "launch",
             "type": "dart",
-	    "program": "lib/main.dart",
-	    "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"]
+	        "program": "lib/main.dart",
+	        "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"]
         },
         {
             "name": "popular_movies (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
-	    "program": "lib/main.dart",
-	    "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"]
+            "flutterMode": "profile",
+	        "program": "lib/main.dart",
+	        "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"]
         },
         {
             "name": "popular_movies (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
-	    "program": "lib/main.dart",
-	    "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"]
+            "flutterMode": "release",
+	        "program": "lib/main.dart",
+	        "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"]
         }
     ]
 }

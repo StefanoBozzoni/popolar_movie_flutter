@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:chopper/chopper.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:popular_movies/data/model/movie.dart';
 import 'package:popular_movies/data/model/movie_detail_info.dart';
@@ -128,7 +127,6 @@ class _MovieRepository implements IMoviesRepository {
 
   @override
   Future<bool> putFavorite(Favorites aFav) async {
-    debugPrint("put favorites");
     var box = await Hive.openBox<Favorites>('Favorites');
 
     await box.put(aFav.id, aFav);
@@ -137,10 +135,8 @@ class _MovieRepository implements IMoviesRepository {
 
   @override
   Future<bool> deleteFavorite(int id) async {
-    debugPrint("delete favorites");
     var box = await Hive.openBox<Favorites>('Favorites');
     await box.delete(id);
-    debugPrint(box.containsKey(id).toString());
     return (!box.containsKey(id));
   }
 

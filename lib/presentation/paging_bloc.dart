@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/model/movie.dart';
@@ -24,10 +23,8 @@ class PagingBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState> {
       final moviesCatalog = await getMoviesListUseCase.getMoviesList2(event.eventType, event.pageNum);
 
       moviesCatalog.fold(failureCond: (failure) {
-        debugPrint('got error!');
         emit(BlocMovieServiceError());
       }, successCond: (data) {
-        debugPrint('got movies!');
         emit(BlocMovieServiceNextPage(data.results??[], event.requestType, event.pageNum, data.totalPages==event.pageNum));
       });
     });

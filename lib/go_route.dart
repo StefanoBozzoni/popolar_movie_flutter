@@ -16,52 +16,51 @@ final GoRouter goRouterManager = GoRouter(
         name: 'mainPage', // Optional, add name to your routes. Allows you navigate by name instead of path
         path: FirtsPage.route,
         builder: (context, state) => const FirtsPage(),
-        routes: [
-          GoRoute(
-              name: "detail2",
-              path: "detailpage2/:id",
-              /*
-              builder: (context, state) {
-                final idMovie = state.pathParameters['id'];
-                return DetailPage(id: (int.parse(idMovie ?? "0")));
-              },
-              */
-              pageBuilder: (context, state) {
-                final idMovie = state.pathParameters['id'];
-                return CustomTransitionPage(
-                  key: state.pageKey,
-                  child: DetailPage(id: int.parse(idMovie ?? "0")),
-                  transitionDuration: const Duration(milliseconds: 6000),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(
-                      opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-                      child: child,
-                    );
-                  },
-                );
-              })
-        ]),
+    ),
     GoRoute(
       name: "detail",
       path: DetailPage.route,
-      /*
+      /* to route to a normal detail page  without transition animation
       builder: (context, state) {
         final idMovie = state.pathParameters['id'];
         return DetailPage(id: (int.parse(idMovie ?? "0"))),
-        
       }
       */
       pageBuilder: (context, state) {
         final idMovie = state.pathParameters['id'];
+        final dx = double.parse(state.queryParameters['dx'] ?? "0.0");
+        final dy = double.parse(state.queryParameters['dy'] ?? "0.0");
+        final mediaQuerySize = MediaQuery.sizeOf(context);
+        final width = mediaQuerySize.width;
+        final heigth = mediaQuerySize.height;
         return CustomTransitionPage(
           key: state.pageKey,
           child: DetailPage(id: int.parse(idMovie ?? "0")),
-          transitionDuration: const Duration(milliseconds: 1000),
+          transitionDuration: const Duration(milliseconds: 700),
+          reverseTransitionDuration: const Duration(milliseconds: 700),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-              child: child,
-            );
+            return ScaleTransition(
+                alignment: Alignment((dx / width - 0.5) * 2, (dy / heigth - 0.5) * 2),
+                scale: Tween<double>(
+                  begin: 0.0,
+                  end: 1.0,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.fastOutSlowIn,
+                  ),
+                ),
+                child: RotationTransition(
+                  alignment: Alignment.topLeft,
+                  turns: animation,
+                  child: child,
+                ));
+               /* to obtain a simple fade transition: 
+                return FadeTransition(
+                  opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                  child: child,
+                );
+                */
           },
         );
       },
@@ -73,5 +72,5 @@ final GoRouter goRouterManager = GoRouter(
       builder: (context, state) => const ThirdPage(),
     ),
   ],
-  routerNeglect: false,
+  routerNeglect: false, //to create history entry on web side
 );

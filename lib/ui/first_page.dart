@@ -72,51 +72,94 @@ class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(key: Key(indexChecked.toString()), mainAxisAlignment: MainAxisAlignment.center, children: [
-      IconButton(
-        icon: Icon(
-          MyFlutterApp.icPopular,
-          color: (indexChecked == 0) ? Colors.black : Colors.white,
-          size: 25,
-        ),
-        onPressed: () {
-          setState(() {
-            indexChecked = 0;
-          });
-          debugPrint((indexChecked).toString());
-          widget.onPressed(indexChecked);
-        },
-      ),
-      IconButton(
-          icon: Icon(
-            MyFlutterApp.icTopRated,
-            color: (indexChecked == 1) ? Colors.black : Colors.white,
-            size: 25,
+    return Row(
+      key: Key(indexChecked.toString()),
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        InkWell(
+          onTap: () {
+            setState(() {
+              indexChecked = 0;
+            });
+            widget.onPressed(indexChecked);
+          },
+          child: Column(
+            children: [
+              Flexible(
+                flex: 3,
+                child: Icon(MyFlutterApp.icPopular, color: (indexChecked == 0) ? Colors.black : Colors.white, size: 26),
+              ),
+              Flexible(
+                  flex: 2,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    "popular",
+                    style: TextStyle(fontSize: 11, color: (indexChecked == 0) ? Colors.black : Colors.white),
+                  ))
+            ],
           ),
-          onPressed: () {
+        ),
+        InkWell(
+          onTap: () {
             setState(() {
               indexChecked = 1;
             });
-            debugPrint(indexChecked.toString());
             widget.onPressed(indexChecked);
-          }),
-      Container(
-          margin: const EdgeInsets.only(right: 16),
-          child: IconButton(
-            icon: Icon(
-              MyFlutterApp.icFavoriteBorderWhite24dp,
-              color: (indexChecked == 2) ? Colors.black : Colors.white,
-              size: 25,
+          },
+          child: Column(children: [
+            Flexible(
+              flex: 3,
+              child: Icon(
+                MyFlutterApp.icTopRated,
+                color: (indexChecked == 1) ? Colors.black : Colors.white,
+                size: 25,
+              ),
             ),
-            onPressed: () {
-              setState(() {
-                indexChecked = 2;
-              });
-              debugPrint(indexChecked.toString());
-              widget.onPressed(indexChecked);
-            },
-          )),
-    ]);
+            Flexible(
+              flex: 2,
+              fit: FlexFit.tight,
+              child:
+                  Text("top", style: TextStyle(fontSize: 11, color: (indexChecked == 1) ? Colors.black : Colors.white)),
+            )
+          ]),
+        ),
+        InkWell(
+          onTap: () {
+            setState(() {
+              indexChecked = 2;
+            });
+            widget.onPressed(indexChecked);
+          },
+          child: Container(
+            padding: const EdgeInsets.only(right: 8),
+            child: Column(
+              children: [
+                Flexible(
+                  flex: 3,
+                  child: Icon(
+                    MyFlutterApp.icFavoriteBorderWhite24dp,
+                    color: (indexChecked == 2) ? Colors.black : Colors.white,
+                    size: 25,
+                  ),
+                ),
+                Flexible(
+                  flex: 2,
+                  fit: FlexFit.tight,
+                  child: Text("fav.",
+                      style: TextStyle(fontSize: 11, color: (indexChecked == 2) ? Colors.black : Colors.white)),
+                )
+              ],
+            ),
+          ),
+        ),
+      ]
+          .map((e) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 9),
+                child: e,
+              ))
+          .toList(),
+    );
   }
 }
 
@@ -144,7 +187,6 @@ class BodyFirstPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     backgroundColor: Colors.blue,
                     alignment: Alignment.center),
-                //icon: const Icon(MyFlutterApp.ic_favorite_border_white_24dp, color: Colors.white, size: 25,),
                 icon: const Icon(
                   MyFlutterApp.group1,
                   color: Colors.white,
@@ -182,7 +224,7 @@ class BodyFirstPage extends StatelessWidget {
           return switch (thisState.listType) {
             "List" => MyList(movies: thisState.moviesList),
             "Grid" => MyGrid(movies: thisState.moviesList),
-            "PagedGrid" => PagedGrid(eventType: thisState.eventType,  movies: thisState.moviesList),
+            "PagedGrid" => PagedGrid(eventType: thisState.eventType, movies: thisState.moviesList),
             _ => const Placeholder()
           };
         }
@@ -215,8 +257,13 @@ class MyGrid extends StatelessWidget {
             const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 150, mainAxisSpacing: 8, mainAxisExtent: 190),
         itemBuilder: (context, index) => InkWell(
-            onTap: () {
-              context.pushNamed("detail", pathParameters: {'id': movies[index].id.toString()});
+            onTapDown: (details) {
+              debugPrint('XDEBUG Tap coordinate: ${details.globalPosition}');
+              final dx = details.globalPosition.dx;
+              final dy = details.globalPosition.dy;
+              context.pushNamed("detail",
+                  pathParameters: {'id': "${movies[index].id}"},
+                  queryParameters: {'dx': "$dx", 'dy': "$dy"});
             },
             child: CachedNetworkImage(
                 imageUrl: baseImagePath + (movies[index].posterPath ?? ""),
@@ -226,21 +273,21 @@ class MyGrid extends StatelessWidget {
                       color: Colors.transparent,
                       child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
                     )
-                /*
-            child: Image.network(baseImagePath + (movies[index].posterPath ?? ""),
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-              if (frame == null) {
-                return Container(
-                  height: 90,
-                  width: 90,
-                  color: Colors.transparent,
-                  child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
-                );
-              } else {
-                return child;
-              }
-              }
-              */
+                /* using the classig image.network
+                child: Image.network(baseImagePath + (movies[index].posterPath ?? ""),
+                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                  if (frame == null) {
+                    return Container(
+                      height: 90,
+                      width: 90,
+                      color: Colors.transparent,
+                      child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
+                    );
+                  } else {
+                    return child;
+                  }
+                  }
+                  */
                 )));
   }
 }
@@ -253,7 +300,6 @@ class MyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //return const Center(child: Text("success!"));
     return ListView.builder(
         itemCount: movies.length,
         itemBuilder: (context, index) => InkWell(

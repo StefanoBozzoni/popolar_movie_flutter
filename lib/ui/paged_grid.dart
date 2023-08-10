@@ -1,8 +1,8 @@
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:popular_movies/presentation/paging_bloc.dart';
 
 import '../data/model/movie.dart';
@@ -27,11 +27,8 @@ class _PagedGridState extends State<PagedGrid> {
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
-      debugPrint("XDEBUG prima pagina $pageKey");
       if (pageKey >= 0) {
         bloc.add(RequestMoviesEventPage("Grid", widget.eventType, pageKey + 1));
-        //bloc.add(RequestMoviesEventPage("Grid", EventType.popular, pageKey + 2));
-        //bloc.add(RequestMoviesEventPage("Grid", EventType.popular, pageKey + 3));
       }
     });
     super.initState();
@@ -53,15 +50,12 @@ class _PagedGridState extends State<PagedGrid> {
               debugPrint('XDEBUG initial state');
             }
             if (state is BlocMovieServiceNextPage) {
-              debugPrint('XDEBUG next page');
               if (state.isLastPage) {
                 _pagingController.appendLastPage(state.moviesList);
               } else {
                 _pagingController.appendPage(state.moviesList, state.nextPage);
               }
             }
-            debugPrint('sono qui');
-            debugPrint('XDEBUG ${state.toString()}');
           },
           child: BlocBuilder<PagingBloc, BlocMovieServiceState>(
               builder: (context, state) => PagedGridView<int, Movie>(
@@ -70,9 +64,18 @@ class _PagedGridState extends State<PagedGrid> {
                       maxCrossAxisExtent: 150, mainAxisSpacing: 8, mainAxisExtent: 190),
                   builderDelegate: PagedChildBuilderDelegate<Movie>(
                       itemBuilder: (context, item, index) => InkWell(
+                            onTapDown: (details) {
+                              debugPrint('XDEBUG Tap coordinate: ${details.globalPosition}');
+                              final dx = details.globalPosition.dx;
+                              final dy = details.globalPosition.dy;
+                              context.pushNamed("detail",
+                                  pathParameters: {'id': "${item.id}"}, queryParameters: {'dx': "$dx", 'dy': "$dy"});
+                            },
+                            /*
                             onTap: () {
                               context.pushNamed("detail", pathParameters: {'id': item.id.toString()});
                             },
+                            */
                             child: CachedNetworkImage(
                                 progressIndicatorBuilder: null,
                                 fadeInDuration: const Duration(seconds: 0),

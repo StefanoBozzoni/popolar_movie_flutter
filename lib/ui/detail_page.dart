@@ -15,8 +15,6 @@ import '../presentation/bloc/bloc_movie_service_bloc.dart';
 class DetailPage extends StatelessWidget {
   final int id;
   static const route = '/home/detailPage/:id';
-  static const route2 = '/home/detailPage2/:id';
-
   const DetailPage({super.key, required this.id});
 
   @override
