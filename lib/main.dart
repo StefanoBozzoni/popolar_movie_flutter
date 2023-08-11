@@ -60,6 +60,7 @@ class MyMaterialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     GoRouter.optionURLReflectsImperativeAPIs = true;
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),

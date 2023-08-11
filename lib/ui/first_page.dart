@@ -91,7 +91,7 @@ class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
                 child: Icon(MyFlutterApp.icPopular, color: (indexChecked == 0) ? Colors.black : Colors.white, size: 26),
               ),
               Flexible(
-                  flex: 2,
+                  flex: 3,
                   fit: FlexFit.tight,
                   child: Text(
                     "popular",
@@ -117,7 +117,7 @@ class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
               ),
             ),
             Flexible(
-              flex: 2,
+              flex: 3,
               fit: FlexFit.tight,
               child:
                   Text("top", style: TextStyle(fontSize: 11, color: (indexChecked == 1) ? Colors.black : Colors.white)),
@@ -132,7 +132,7 @@ class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
             widget.onPressed(indexChecked);
           },
           child: Container(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(right: 8, top: 1),
             child: Column(
               children: [
                 Flexible(
@@ -144,7 +144,7 @@ class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
                   ),
                 ),
                 Flexible(
-                  flex: 2,
+                  flex: 3,
                   fit: FlexFit.tight,
                   child: Text("fav.",
                       style: TextStyle(fontSize: 11, color: (indexChecked == 2) ? Colors.black : Colors.white)),
@@ -155,7 +155,7 @@ class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
         ),
       ]
           .map((e) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 9),
+                padding: const EdgeInsets.only(left: 9, right: 9, top: 9),
                 child: e,
               ))
           .toList(),

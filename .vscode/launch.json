@@ -9,7 +9,8 @@
             "request": "launch",
             "type": "dart",
 	        "program": "lib/main.dart",
-	        "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"]
+	        "args": ["--web-renderer", "html","--dart-define-from-file","lib/api_keys.json"],
+            "flutterMode": "debug"
         },
         {
             "name": "popular_movies (profile mode)",
