@@ -74,4 +74,17 @@ class _$MovieService extends MovieService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> searchMovies(String query) {
+    final Uri $url = Uri.parse('/3/search/movie');
+    final Map<String, dynamic> $params = <String, dynamic>{'query': query};
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

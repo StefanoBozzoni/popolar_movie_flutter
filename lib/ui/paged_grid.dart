@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:popular_movies/presentation/paging_bloc.dart';
+import 'package:popular_movies/presentation/bloc_paging.dart';
 
 import '../data/model/movie.dart';
 import '../di/injection.dart';

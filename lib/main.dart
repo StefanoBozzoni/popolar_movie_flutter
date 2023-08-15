@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logging/logging.dart';
@@ -8,6 +9,7 @@ import 'package:popular_movies/data/model/favorites.dart';
 import 'package:popular_movies/data/model/movies_catalog.dart';
 import 'package:popular_movies/data/service/movie_service.dart';
 import 'package:popular_movies/go_route.dart';
+import 'package:popular_movies/presentation/bloc_search_movie.dart';
 import 'package:provider/provider.dart';
 
 import 'data/model/movie.dart';
@@ -41,7 +43,10 @@ class MyApp extends StatelessWidget {
           dispose: (_, MovieService service) => service.client.dispose(),
         )
       ],
-      child: const MyMaterialApp(),
+      child: BlocProvider(
+        create: (context) => getIt<SearchMoviesBloc>(),
+        child: const MyMaterialApp(),
+        ) ,
     );
   }
 }

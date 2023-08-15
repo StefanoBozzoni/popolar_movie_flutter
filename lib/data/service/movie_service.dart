@@ -20,6 +20,9 @@ abstract class MovieService extends ChopperService {
   @Get(path: 'movie/{id}')
   Future<Response> getSingleMovie(@Path("id") int id);
 
+  @Get(path: 'search/movie')
+  Future<Response> searchMovies(@Query("query") String query);
+
   static MovieService create() {
     final client = ChopperClient(
         baseUrl: Uri.parse('https://api.themoviedb.org'),

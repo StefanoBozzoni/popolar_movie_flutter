@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:popular_movies/my_flutter_app_icons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +7,8 @@ import '../data/model/movie.dart';
 import '../di/injection.dart';
 import '../domain/utils/constants.dart';
 import '../presentation/bloc/bloc_movie_service_bloc.dart';
+import 'app_bar_menu_switches.dart';
+import 'my_grid.dart';
 
 class FirtsPage extends StatelessWidget {
   static const route = "/home/mainpage";
@@ -15,9 +16,17 @@ class FirtsPage extends StatelessWidget {
 
   const FirtsPage({super.key});
 
+  /*
   @override
   Widget build(BuildContext context) => BlocProvider(
         create: (context) => getIt<MovieServiceBloc>(),
+  */      
+
+  @override
+  Widget build(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => getIt<MovieServiceBloc>(),),
+        ],
         child: BlocBuilder<MovieServiceBloc, BlocMovieServiceState>(
           builder: (context, state) {
             return Scaffold(
@@ -53,115 +62,6 @@ class FirtsPage extends StatelessWidget {
       );
 }
 
-class AppbarMenuSwitches extends StatefulWidget {
-  final Function(int index) onPressed;
-  const AppbarMenuSwitches({super.key, required this.onPressed});
-
-  @override
-  State<AppbarMenuSwitches> createState() => _AppbarMenuSwitchesState();
-}
-
-class _AppbarMenuSwitchesState extends State<AppbarMenuSwitches> {
-  late int indexChecked;
-
-  @override
-  void initState() {
-    super.initState();
-    indexChecked = 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      key: Key(indexChecked.toString()),
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              indexChecked = 0;
-            });
-            widget.onPressed(indexChecked);
-          },
-          child: Column(
-            children: [
-              Flexible(
-                flex: 3,
-                child: Icon(MyFlutterApp.icPopular, color: (indexChecked == 0) ? Colors.black : Colors.white, size: 26),
-              ),
-              Flexible(
-                  flex: 3,
-                  fit: FlexFit.tight,
-                  child: Text(
-                    "popular",
-                    style: TextStyle(fontSize: 11, color: (indexChecked == 0) ? Colors.black : Colors.white),
-                  ))
-            ],
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              indexChecked = 1;
-            });
-            widget.onPressed(indexChecked);
-          },
-          child: Column(children: [
-            Flexible(
-              flex: 3,
-              child: Icon(
-                MyFlutterApp.icTopRated,
-                color: (indexChecked == 1) ? Colors.black : Colors.white,
-                size: 25,
-              ),
-            ),
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child:
-                  Text("top", style: TextStyle(fontSize: 11, color: (indexChecked == 1) ? Colors.black : Colors.white)),
-            )
-          ]),
-        ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              indexChecked = 2;
-            });
-            widget.onPressed(indexChecked);
-          },
-          child: Container(
-            padding: const EdgeInsets.only(right: 8, top: 1),
-            child: Column(
-              children: [
-                Flexible(
-                  flex: 3,
-                  child: Icon(
-                    MyFlutterApp.icFavoriteBorderWhite24dp,
-                    color: (indexChecked == 2) ? Colors.black : Colors.white,
-                    size: 25,
-                  ),
-                ),
-                Flexible(
-                  flex: 3,
-                  fit: FlexFit.tight,
-                  child: Text("fav.",
-                      style: TextStyle(fontSize: 11, color: (indexChecked == 2) ? Colors.black : Colors.white)),
-                )
-              ],
-            ),
-          ),
-        ),
-      ]
-          .map((e) => Padding(
-                padding: const EdgeInsets.only(left: 9, right: 9, top: 9),
-                child: e,
-              ))
-          .toList(),
-    );
-  }
-}
 
 class BodyFirstPage extends StatelessWidget {
   final BlocMovieServiceState state;
@@ -239,56 +139,6 @@ class BodyFirstPage extends StatelessWidget {
           return const Placeholder();
         }
     }
-  }
-}
-
-//movies grid, not paginated
-class MyGrid extends StatelessWidget {
-  final List<Movie> movies;
-  final String baseImagePath = "https://image.tmdb.org/t/p/w185/";
-  const MyGrid({super.key, required this.movies});
-
-  @override
-  Widget build(BuildContext context) {
-    //timeDilation = 5.0;
-    return GridView.builder(
-        itemCount: movies.length,
-        gridDelegate: //const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 8, mainAxisExtent: 190),
-            const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 150, mainAxisSpacing: 8, mainAxisExtent: 190),
-        itemBuilder: (context, index) => InkWell(
-            onTapDown: (details) {
-              debugPrint('XDEBUG Tap coordinate: ${details.globalPosition}');
-              final dx = details.globalPosition.dx;
-              final dy = details.globalPosition.dy;
-              context.pushNamed("detail",
-                  pathParameters: {'id': "${movies[index].id}"},
-                  queryParameters: {'dx': "$dx", 'dy': "$dy"});
-            },
-            child: CachedNetworkImage(
-                imageUrl: baseImagePath + (movies[index].posterPath ?? ""),
-                placeholder: (context, url) => Container(
-                      height: 90,
-                      width: 90,
-                      color: Colors.transparent,
-                      child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
-                    )
-                /* using the classig image.network
-                child: Image.network(baseImagePath + (movies[index].posterPath ?? ""),
-                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  if (frame == null) {
-                    return Container(
-                      height: 90,
-                      width: 90,
-                      color: Colors.transparent,
-                      child: const Center(widthFactor: 10, heightFactor: 10, child: CircularProgressIndicator()),
-                    );
-                  } else {
-                    return child;
-                  }
-                  }
-                  */
-                )));
   }
 }
 

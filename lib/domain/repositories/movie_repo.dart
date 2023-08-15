@@ -27,6 +27,7 @@ abstract interface class IMoviesRepository {
   Future<MyEither<Favorites?, Failure>> getFavStatus(int id);
   Future<bool> setFavStatus(bool isChecked, Movie movie);
   static IMoviesRepository getInstance() => _MovieRepository(getIt());
+  Future<MyEither<MoviesCatalog, Failure>> searchMovies(String query);
 }
 
 class _MovieRepository implements IMoviesRepository {
@@ -46,7 +47,7 @@ class _MovieRepository implements IMoviesRepository {
         {
           response = await movieApiService.getTopRatedMovies(pageNum);
         }
-
+      case EventType.search:
       case EventType.favorites:
         {
           throw Exception("wrong api called");
@@ -59,6 +60,27 @@ class _MovieRepository implements IMoviesRepository {
     } else {
       return MyEither(failure: DefaultFailure(errorMessage: ""));
     }
+  }
+
+  @override
+  Future<MyEither<MoviesCatalog, Failure>> searchMovies(String query) async {
+    try {
+      
+      Response<dynamic> response = await movieApiService.searchMovies(query);
+
+      if (response.isSuccessful) {
+         final movies = MoviesCatalog.fromJson(response.body);
+         return MyEither(success: movies);
+      } else {
+        return MyEither(failure: DefaultFailure(errorMessage: "response error"));
+      }
+
+    } on HttpException catch (e) {
+      return MyEither(failure: DefaultFailure(errorMessage: e.message));
+    } catch (e) {
+      return MyEither(failure: DefaultFailure(errorMessage: ""));
+    }
+
   }
 
   //example using Result class as a wrapper for return value
