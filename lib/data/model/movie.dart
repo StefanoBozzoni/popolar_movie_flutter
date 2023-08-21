@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'movie.g.dart';
 
 @JsonSerializable()
+@DateTimeConverter()
 class Movie {
   @JsonKey(name: "adult")
   bool? adult;
@@ -86,6 +89,29 @@ class Movie {
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieToJson(this);
+}
+
+class DateTimeConverter implements JsonConverter<DateTime?, String> {
+  const DateTimeConverter();
+  @override
+  String toJson(DateTime? date) {
+    debugPrint("XDEBUG data: $date");
+    if (date != null) {
+      return DateFormat('yyyy-MM-dd').format(date);
+    } else {
+      return "";
+    }
+  }
+
+  @override
+  DateTime? fromJson(String json) {
+    debugPrint("XDEBUG data: $json");
+    if (json.isEmpty) {
+      return null;
+    } else {
+      return DateFormat('yyyy-MM-dd').parse(json);
+    }
+  }
 }
 
 @JsonSerializable()

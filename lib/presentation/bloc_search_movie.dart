@@ -25,7 +25,7 @@ class SearchMoviesBloc extends Bloc<BlocMovieServiceEvent, BlocMovieServiceState
           emit(BlocMovieServiceError());
         }, successCond: (data) {
           emit(BlocMovieServiceSuccess(
-            data.results ?? [],
+            data.results?.where((element) => element.releaseDate!=null).toList() ?? [],
             "Grid",
             EventType.search,
           ));

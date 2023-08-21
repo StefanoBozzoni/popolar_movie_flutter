@@ -208,21 +208,22 @@ class MySearchDelegate extends SearchDelegate {
       switch (state.runtimeType) {
         case BlocMovieServiceInitial:
           {
+            debugPrint("XDEBUG ${state.runtimeType}");
             return const Center(child: CircularProgressIndicator());
           }
         case BlocMovieServiceLoading:
           {
+            debugPrint("XDEBUG ${state.runtimeType}");
             return const Center(child: CircularProgressIndicator());
           }
         case BlocMovieServiceSuccess:
           {
+            debugPrint("XDEBUG ${state.runtimeType}");
             final thisState = state as BlocMovieServiceSuccess;
+
+
+            return MyGrid(movies: thisState.moviesList);
             /*
-            if (thisState.moviesList.length == 1) {
-              debugPrint("XDEBUG quiiii");
-              query = thisState.moviesList[0].title ?? "";
-            }
-            */
             return ListView.builder(
               itemCount: thisState.moviesList.length,
               itemBuilder: (context, index) {
@@ -237,13 +238,17 @@ class MySearchDelegate extends SearchDelegate {
                 );
               },
             );
+            */
           }
         case BlocMovieServiceError:
           {
+            final thisState = state as BlocMovieServiceError;
+            debugPrint("XDEBUG ${thisState.toString()}");
             return const Placeholder();
           }
         default:
           {
+            debugPrint("XDEBUG ${state.runtimeType}");
             return const Placeholder();
           }
       }
@@ -257,4 +262,12 @@ class MySearchDelegate extends SearchDelegate {
     super.showSuggestions(context);
     return true;
   }
+
+  /*
+  @override
+  bool showResults(BuildContext context) {
+    // We don't want to show the suggestions widget
+    return true;
+  }
+  */
 }

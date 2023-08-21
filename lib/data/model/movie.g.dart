@@ -31,9 +31,8 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       productionCountries: (json['production_countries'] as List<dynamic>?)
           ?.map((e) => ProductionCountry.fromJson(e as Map<String, dynamic>))
           .toList(),
-      releaseDate: json['release_date'] == null
-          ? null
-          : DateTime.parse(json['release_date'] as String),
+      releaseDate: _$JsonConverterFromJson<String, DateTime>(
+          json['release_date'], const DateTimeConverter().fromJson),
       revenue: json['revenue'] as int?,
       runtime: json['runtime'] as int?,
       spokenLanguages: (json['spoken_languages'] as List<dynamic>?)
@@ -63,7 +62,8 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'poster_path': instance.posterPath,
       'production_companies': instance.productionCompanies,
       'production_countries': instance.productionCountries,
-      'release_date': instance.releaseDate?.toIso8601String(),
+      'release_date': _$JsonConverterToJson<String, DateTime>(
+          instance.releaseDate, const DateTimeConverter().toJson),
       'revenue': instance.revenue,
       'runtime': instance.runtime,
       'spoken_languages': instance.spokenLanguages,
@@ -74,6 +74,18 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'vote_average': instance.voteAverage,
       'vote_count': instance.voteCount,
     };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 BelongsToCollection _$BelongsToCollectionFromJson(Map<String, dynamic> json) =>
     BelongsToCollection(

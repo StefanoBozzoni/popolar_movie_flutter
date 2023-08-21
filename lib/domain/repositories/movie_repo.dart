@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chopper/chopper.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:popular_movies/data/model/movie.dart';
 import 'package:popular_movies/data/model/movie_detail_info.dart';
@@ -65,22 +66,22 @@ class _MovieRepository implements IMoviesRepository {
   @override
   Future<MyEither<MoviesCatalog, Failure>> searchMovies(String query) async {
     try {
-      
       Response<dynamic> response = await movieApiService.searchMovies(query);
 
       if (response.isSuccessful) {
-         final movies = MoviesCatalog.fromJson(response.body);
-         return MyEither(success: movies);
+        final movies = MoviesCatalog.fromJson(response.body);
+        return MyEither(success: movies);
       } else {
+        debugPrint("XDEBUG response error");
         return MyEither(failure: DefaultFailure(errorMessage: "response error"));
       }
-
     } on HttpException catch (e) {
+      debugPrint("XDEBUG http exception ${e.message}");
       return MyEither(failure: DefaultFailure(errorMessage: e.message));
     } catch (e) {
+      debugPrint("XDEBUG http exception $e}");
       return MyEither(failure: DefaultFailure(errorMessage: ""));
     }
-
   }
 
   //example using Result class as a wrapper for return value
