@@ -176,15 +176,6 @@ class MySearchDelegate extends SearchDelegate {
         case BlocMovieServiceSuccess:
           {
             final thisState = state as BlocMovieServiceSuccess;
-            //query = "";
-
-            /*
-            if (thisState.moviesList.length == 1) {
-              debugPrint("XDEBUG quiiii");
-              query = thisState.moviesList[0].title ?? "";
-            }
-            */
-
             return MyGrid(movies: thisState.moviesList);
           }
         case BlocMovieServiceError:
@@ -208,17 +199,14 @@ class MySearchDelegate extends SearchDelegate {
       switch (state.runtimeType) {
         case BlocMovieServiceInitial:
           {
-            debugPrint("XDEBUG ${state.runtimeType}");
             return const Center(child: CircularProgressIndicator());
           }
         case BlocMovieServiceLoading:
           {
-            debugPrint("XDEBUG ${state.runtimeType}");
             return const Center(child: CircularProgressIndicator());
           }
         case BlocMovieServiceSuccess:
           {
-            debugPrint("XDEBUG ${state.runtimeType}");
             final thisState = state as BlocMovieServiceSuccess;
 
 
@@ -248,7 +236,6 @@ class MySearchDelegate extends SearchDelegate {
           }
         default:
           {
-            debugPrint("XDEBUG ${state.runtimeType}");
             return const Placeholder();
           }
       }

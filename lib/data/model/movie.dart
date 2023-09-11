@@ -95,7 +95,6 @@ class DateTimeConverter implements JsonConverter<DateTime?, String> {
   const DateTimeConverter();
   @override
   String toJson(DateTime? date) {
-    debugPrint("XDEBUG data: $date");
     if (date != null) {
       return DateFormat('yyyy-MM-dd').format(date);
     } else {
@@ -105,7 +104,6 @@ class DateTimeConverter implements JsonConverter<DateTime?, String> {
 
   @override
   DateTime? fromJson(String json) {
-    debugPrint("XDEBUG data: $json");
     if (json.isEmpty) {
       return null;
     } else {

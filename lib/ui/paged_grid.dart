@@ -21,7 +21,7 @@ class PagedGrid extends StatefulWidget {
 
 class _PagedGridState extends State<PagedGrid> {
   final String baseImagePath = "https://image.tmdb.org/t/p/w185/";
-  final PagingController<int, Movie> _pagingController = PagingController(firstPageKey: 0);
+  final PagingController<int, Movie> _pagingController = PagingController(firstPageKey: 0,invisibleItemsThreshold: 3);
   late final bloc = getIt<PagingBloc>();
 
   @override
@@ -45,6 +45,7 @@ class _PagedGridState extends State<PagedGrid> {
   Widget build(BuildContext context) => BlocProvider(
       create: (context) => bloc,
       child: BlocListener<PagingBloc, BlocMovieServiceState>(
+        listenWhen: ((previous, current) => (current is BlocMovieServiceNextPage) ? true : false),
           listener: (context, state) {
             if (state is BlocMovieServiceInitial) {
               debugPrint('XDEBUG initial state');
